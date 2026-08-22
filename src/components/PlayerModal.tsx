@@ -53,6 +53,7 @@ export function PlayerModal({
                 mode={mode}
                 tier={tier}
                 elo={elo ?? -1}
+                showTooltip
               />
             ))}
         </div>

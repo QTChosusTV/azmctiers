@@ -16,11 +16,11 @@ export type Mode = (typeof MODES)[number];
 export const MODE_LABELS: Record<Mode, string> = {
   axe: 'Axe',
   sword: 'Sword',
-  nethop: 'Netherite Pot',
+  nethop: 'NethOP',
   smp: 'SMP',
   mace: 'Mace',
   vanilla: 'Vanilla',
-  diapot: 'Diamond Pot',
+  diapot: 'Pot',
   uhc: 'UHC',
 };
 
