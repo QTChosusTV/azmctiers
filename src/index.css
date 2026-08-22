@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=SUSE&display=swap');
+
+:root {
+  --bg-void: #0b0416;
+  --bg-panel: #150a26;
+  --bg-panel-raised: #1c1030;
+  --bg-card: #1a0f2e;
+  --border-subtle: rgba(157, 78, 221, 0.18);
+  --border-strong: rgba(157, 78, 221, 0.4);
+  --purple-deep: #7b2cbf;
+  --purple-mid: #9d4edd;
+  --purple-light: #c77dff;
+  --text-primary: #f4eefc;
+  --text-secondary: #b8a5d6;
+  --text-muted: #6e5c8a;
+
+  --tier-ht1: #e9e9e9;
+  --tier-lt1: #675353;
+  --tier-ht2: #D2001B;
+  --tier-lt2: #9f4aff;
+  --tier-ht3: #13cebb;
+  --tier-lt3: #48f304;
+  --tier-ht4: #e4a000;
+  --tier-lt4: #b4b4b4;
+  --tier-ht5: #cf3000;
+  --tier-lt5: #6f6f6f;
+
+  --font-display: 'SUSE', sans-serif;
+  --font-body: 'SUSE', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(123, 44, 191, 0.16), transparent), var(--bg-void);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--purple-deep);
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
