@@ -134,7 +134,7 @@ function TierColumn({
             <div className="player-card__info">
               <div className="player-card__name">{p.username}</div>
               <div className="player-card__tier" style={{ color: getEloColor(elo) }}>
-                {elo} <span className="player-card__elo-unit">azp</span>
+                {Math.round(elo*10)/10} <span className="player-card__elo-unit">azp</span>
               </div>
             </div>
             <TierIcon tier={tier} size={30} />
