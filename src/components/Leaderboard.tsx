@@ -54,7 +54,7 @@ export function Leaderboard({
               <span className="col-points">{p.points}</span>
               <span className="col-tiers">
                 {sortedModeTiers.map(({ mode, tier, elo }) => (
-                  <TierBadge key={mode} mode={mode} tier={tier} elo={elo ?? -1} />
+                  <TierBadge key={mode} mode={mode} tier={tier} elo={elo ?? undefined} />
                 ))}
               </span>
             </RevealRow>

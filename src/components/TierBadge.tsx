@@ -17,11 +17,16 @@ export function TierBadge({
   showTooltip?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
-  const color = tier ? getEloColor(elo ?? 0) : 'var(--text-muted)';
-  const tintedBg = tier
+  const hasElo = elo !== undefined && elo !== null;
+  const color = tier
+    ? getEloColor(elo ?? 0)
+    : hasElo
+      ? `color-mix(in srgb, ${getEloColor(elo ?? 0)} 50%, var(--text-muted))`
+      : 'var(--text-muted)';
+  const tintedBg = tier || hasElo
     ? `color-mix(in srgb, ${color} 22%, var(--bg-panel-raised))`
     : 'var(--bg-panel-raised)';
-  const tintedLabelBg = tier
+  const tintedLabelBg = tier || hasElo
     ? `color-mix(in srgb, ${color} 18%, transparent)`
     : 'transparent';
 
@@ -37,9 +42,9 @@ export function TierBadge({
         className="tier-badge__icon"
         style={{
           color,
-          borderColor: tier ? getEloColor(elo ?? 0) : 'var(--border-subtle)',
+          borderColor: tier ? getEloColor(elo ?? 0) : hasElo ? color : 'var(--border-subtle)',
           background: tintedBg,
-          opacity: tier ? 1 : 0.35,
+          opacity: tier ? 1 : hasElo ? 0.20 : 0.10,
         }}
       >
         <ModeIcon mode={mode} size={26} />
@@ -47,7 +52,7 @@ export function TierBadge({
       <span
         className="tier-badge__label"
         style={{
-          color: tier ? getEloColor(elo ?? 0) : 'var(--text-muted)',
+          color,
           background: tintedLabelBg,
         }}
       >
