@@ -12,6 +12,8 @@ import { Spinner } from './components/Spinner';
 type Tab = 'overall' | Mode;
 // const TABS: Tab[] = ['overall', ...MODES];
 
+const SHOW_ELO_RECALC_NOTICE = true;
+
 export default function App() {
   const [players, setPlayers] = useState<PlayerSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +21,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('overall');
   const [selected, setSelected] = useState<PlayerSummary | null>(null);
+  const [noticeDismissed, setNoticeDismissed] = useState(false);
 
   const tabsRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
@@ -65,6 +68,22 @@ export default function App() {
 
   return (
     <div className="page">
+
+      {SHOW_ELO_RECALC_NOTICE && !noticeDismissed && (
+        <div className="elo-notice">
+          <span className="elo-notice__text">
+            ⚠️ Elo is currently being recalculated due to a change in the elo algorithm. Displayed elo values may not be accurate.
+          </span>
+          <button
+            className="elo-notice__close"
+            onClick={() => setNoticeDismissed(true)}
+            aria-label="Dismiss notice"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <header className="page__header">
         <h1 className="page__title">AZMCTiers</h1>
       </header>
@@ -235,6 +254,38 @@ export default function App() {
         }
         @media (prefers-reduced-motion: reduce) {
           .page__tab-panel { animation: none; }
+        }
+        .elo-notice {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 10px 16px;
+          margin-bottom: 20px;
+          background: rgba(250, 204, 21, 0.1);
+          border: 1px solid rgba(250, 204, 21, 0.35);
+          border-radius: 10px;
+          color: #facc15;
+          font-size: 14px;
+          text-align: center;
+        }
+        .elo-notice__text {
+          flex: 1;
+        }
+        .elo-notice__close {
+          background: transparent;
+          border: none;
+          color: #facc15;
+          font-size: 14px;
+          cursor: pointer;
+          padding: 2px 6px;
+          border-radius: 6px;
+          opacity: 0.8;
+          transition: opacity 0.15s ease, background 0.15s ease;
+        }
+        .elo-notice__close:hover {
+          opacity: 1;
+          background: rgba(250, 204, 21, 0.15);
         }
       `}</style>
     </div>
