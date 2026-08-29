@@ -12,7 +12,7 @@ import { Spinner } from './components/Spinner';
 type Tab = 'overall' | Mode;
 // const TABS: Tab[] = ['overall', ...MODES];
 
-const SHOW_ELO_RECALC_NOTICE = true;
+const SHOW_ELO_RECALC_NOTICE = false;
 
 export default function App() {
   const [players, setPlayers] = useState<PlayerSummary[]>([]);
