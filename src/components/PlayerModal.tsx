@@ -76,7 +76,7 @@ export function PlayerModal({
         .modal {
           position: relative;
           width: 100%;
-          max-width: 600px;
+          max-width: 700px;
           background: var(--bg-panel);
           border: 1px solid var(--border-strong);
           border-radius: 16px;

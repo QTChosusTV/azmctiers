@@ -8,6 +8,8 @@ import maceIcon from '../assets/modes/mace.png';
 import vanillaIcon from '../assets/modes/vanilla.png';
 import potIcon from '../assets/modes/pot.png';
 import uhcIcon from '../assets/modes/uhc.png';
+import spearMaceIcon from '../assets/modes/spearmace.png';
+import cartIcon from '../assets/modes/cart.png';
 
 // NOTE: schema has two "pot" modes (diapot = Diamond Pot, nethop = Netherite
 // Pot) but only one pot.png was provided. Mapping pot.png -> diapot for now;
@@ -21,6 +23,8 @@ const ICONS: Record<Mode, string> = {
   vanilla: vanillaIcon,
   diapot: potIcon,
   uhc: uhcIcon,
+  spearmace: spearMaceIcon,
+  cart: cartIcon,
 };
 
 export function ModeIcon({ mode, size = 18 }: { mode: Mode; size?: number }) {

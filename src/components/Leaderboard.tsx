@@ -33,7 +33,7 @@ export function Leaderboard({
             if (aEmpty && !bEmpty) return -1;
             if (!aEmpty && bEmpty) return 1;
 
-            if (aEmpty && bEmpty) return 0;
+            if (aEmpty && bEmpty) return (b.elo ?? 0) - (a.elo ?? 0);
             return (b.elo ?? 0) - (a.elo ?? 0);
           });
 
@@ -73,7 +73,7 @@ export function Leaderboard({
         }
         .leaderboard__header {
           display: grid;
-          grid-template-columns: 72px 0.67fr 0.33fr 460px;
+          grid-template-columns: 60px 0.6fr 100px 1fr;
           align-items: center;
           padding: 14px 28px;
           background: var(--bg-panel-raised);
@@ -86,7 +86,7 @@ export function Leaderboard({
         }
         .leaderboard__row {
           display: grid;
-          grid-template-columns: 72px 0.67fr 0.33fr 460px;
+          grid-template-columns: 60px 0.6fr 100px 1fr;
           align-items: center;
           padding: 10px 28px;
           border-bottom: 1px solid var(--border-subtle);
@@ -123,7 +123,7 @@ export function Leaderboard({
         .col-tiers {
           display: flex;
           font-size: 20px;
-          gap: 8px;
+          gap: 10px;
           flex-wrap: wrap;
           justify-content: flex-end;
         }

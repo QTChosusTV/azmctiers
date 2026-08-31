@@ -17,7 +17,7 @@ const SHOW_ELO_RECALC_NOTICE = false;
 export default function App() {
   const [players, setPlayers] = useState<PlayerSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showLoader, setShowLoader] = useState(true); // controls fade-out, stays mounted briefly after loading flips false
+  const [showLoader, setShowLoader] = useState(true); // controls fade-out, stays mou nted briefly after loading flips false
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('overall');
   const [selected, setSelected] = useState<PlayerSummary | null>(null);
@@ -168,7 +168,7 @@ export default function App() {
         .page__tabs {
           position: relative;
           display: flex;
-          overflow-x: auto;
+          overflow-x: hidden;
           background: var(--bg-panel);
           border: 1px solid var(--border-subtle);
           border-radius: 12px;
@@ -184,23 +184,24 @@ export default function App() {
           pointer-events: none;
         }
         .page__tab {
-          flex: 1;
-          min-width: 84px;
+          flex: 1 1 0;
+          min-width: 44px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 8px;
-          padding: 18px 10px;
+          gap: 4px;
+          padding: 14px 6px;
           background: var(--bg-panel-raised);
           border: none;
           border-bottom: 3px solid transparent;
           color: var(--text-secondary);
           font-family: var(--font-display);
-          font-size: 13px;
+          font-size: 12px;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           cursor: pointer;
           transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+          white-space: nowrap;
         }
         .page__tab:first-child {
           border-top-left-radius: 12px;

@@ -9,6 +9,8 @@ export const MODES = [
   'vanilla',
   'diapot',
   'uhc',
+  'spearmace',
+  'cart'
 ] as const;
 
 export type Mode = (typeof MODES)[number];
@@ -22,6 +24,8 @@ export const MODE_LABELS: Record<Mode, string> = {
   vanilla: 'Vanilla',
   diapot: 'Pot',
   uhc: 'UHC',
+  spearmace: 'Spearmace',
+  cart: 'Cart'
 };
 
 // Column name on the `tiers` table for each mode
@@ -34,6 +38,8 @@ export const MODE_COLUMN: Record<Mode, string> = {
   vanilla: 'tiers_vanilla',
   diapot: 'tiers_diapot',
   uhc: 'tiers_uhc',
+  spearmace: 'tiers_spearmace',
+  cart: 'tiers_cart',
 };
 
 export const TIER_SCALE = [
@@ -118,6 +124,8 @@ export interface PlayerRow {
   tiers_vanilla: ModeTierData | null;
   tiers_diapot: ModeTierData | null;
   tiers_uhc: ModeTierData | null;
+  tiers_spearmace: ModeTierData | null;
+  tiers_cart: ModeTierData | null;
 }
 
 export interface PlayerModeTier {
