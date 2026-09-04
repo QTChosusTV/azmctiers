@@ -3,6 +3,7 @@
 import type { PlayerSummary } from '../lib/tiers';
 import { PlayerAvatar } from './PlayerAvatar';
 import { TierBadge } from './TierBadge';
+import { PlayerBadges } from './PlayerBadges';
 
 export function PlayerModal({
   player,
@@ -34,6 +35,8 @@ export function PlayerModal({
             <TrophyIcon /> OVERALL <span className="modal__points-value">({player.points} points)</span>
           </div>
         </div>
+
+        <PlayerBadges discordId={player.discordId} />
 
         <div className="modal__tiers-label">Tiers</div>
         <div className="modal__tiers">
