@@ -4,15 +4,19 @@ import {
   MIN_VISIBLE_TIER_GROUP,
   MAX_VISIBLE_TIER_GROUP,
   TIER_COLORS,
+  TIER_SCALE,
   tierGroup,
   type Mode,
   type PlayerSummary,
   type Tier,
   getEloColor,
+  getTierRange,
 } from '../lib/tiers';
 import { PlayerAvatar } from './PlayerAvatar';
 import { TierIcon } from './TierIcon';
 import { RevealRow } from './RevealRow';
+
+const DEMOTE_COLOR = '#ff5c5c';
 
 const ALL_GROUPS: { id: 1 | 2 | 3 | 4 | 5; label: string; htColor: string; ltColor: string }[] = [
   { id: 1, label: 'Luminite - Netherite', htColor: TIER_COLORS.HT1, ltColor: TIER_COLORS.LT1 },
@@ -133,9 +137,7 @@ function TierColumn({
             <PlayerAvatar username={p.username} size={34} />
             <div className="player-card__info">
               <div className="player-card__name">{p.username}</div>
-              <div className="player-card__tier" style={{ color: getEloColor(elo) }}>
-                {Math.round(elo*10)/10} <span className="player-card__elo-unit">azp</span>
-              </div>
+              <EloBar elo={elo} tier={tier} />
             </div>
             <TierIcon tier={tier} size={30} />
             <div style={{ color: TIER_COLORS[tier] }}>{tier}</div>
@@ -209,13 +211,6 @@ function TierColumn({
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .player-card__tier {
-          font-family: var(--font-display);
-          font-size: 14px;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          flex-shrink: 0;
-        }
         .tier-column__empty {
           color: var(--text-muted);
           font-size: 14px;
@@ -226,13 +221,77 @@ function TierColumn({
           flex-direction: column;
           flex: 1;
           min-width: 0;
-          gap: 2px;
+          gap: 4px;
         }
-        .player-card__elo-unit {
-          font-size: 10px;
-          font-weight: 500;
-          opacity: 0.7;
+
+        /* ---------- Elo progress bar ---------- */
+        .elo-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
         }
+        .elo-bar {
+          position: relative;
+          flex: 1;
+          min-width: 0;
+          height: 18px;
+          border-radius: 999px;
+          overflow: hidden;
+          background: color-mix(in srgb, var(--elo-color) 12%, #0d0b1a);
+          border: 1.5px solid color-mix(in srgb, var(--elo-color) 55%, white);
+        }
+        .elo-bar__fill {
+          position: absolute;
+          inset: 0 auto 0 0;
+          border-radius: 999px;
+          background: linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--elo-color) 65%, black),
+            var(--elo-color)
+          );
+          transition: width 0.5s ease;
+        }
+        .elo-bar__value {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--font-display);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #fff;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        .rank-arrows {
+          flex-shrink: 0;
+        }
+        .rank-arrows--up {
+          animation: rank-bob-up 1.4s ease-in-out infinite;
+        }
+        .rank-arrows--down {
+          animation: rank-bob-down 1.4s ease-in-out infinite;
+        }
+        @keyframes rank-bob-up {
+          0%, 100% { transform: translateY(1px); }
+          50% { transform: translateY(-2px); }
+        }
+        @keyframes rank-bob-down {
+          0%, 100% { transform: translateY(-1px); }
+          50% { transform: translateY(2px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .rank-arrows--up,
+          .rank-arrows--down {
+            animation: none;
+          }
+          .elo-bar__fill {
+            transition: none;
+          }
+        }
+
         @media (max-width: 900px) {
           .tier-column {
             border-right: none;
@@ -241,6 +300,76 @@ function TierColumn({
         }
       `}</style>
     </div>
+  );
+}
+
+/**
+ * Progress bar showing where `elo` sits between the tier's min and max.
+ *  - elo >= tier max  -> bar is full + "^^" (promotion pending)
+ *  - elo <  tier min  -> bar is empty + "v" (demotion pending)
+ * The top tier has no max (always full, never promotes); the lowest tier
+ * has nowhere to demote to, so it never shows the down marker.
+ */
+function EloBar({ elo, tier }: { elo: number; tier: Tier }) {
+  const { min, max } = getTierRange(tier);
+  const color = getEloColor(elo);
+
+  const span = max === null ? 0 : max - min;
+  const progress =
+    max === null || span <= 0 ? 1 : Math.min(1, Math.max(0, (elo - min) / span));
+
+  const overRanked = max !== null && elo >= max;
+  const underRanked = tier !== TIER_SCALE[0] && elo < min;
+
+  return (
+    <div className="elo-row">
+      <div
+        className="elo-bar"
+        role="progressbar"
+        aria-valuemin={min}
+        aria-valuemax={max ?? undefined}
+        aria-valuenow={Math.round(elo)}
+        style={{ '--elo-color': color } as React.CSSProperties}
+      >
+        <div className="elo-bar__fill" style={{ width: `${progress * 100}%` }} />
+        <span className="elo-bar__value">{Math.round(elo * 10) / 10}</span>
+      </div>
+      {overRanked && <RankArrows direction="up" color={color} />}
+      {underRanked && <RankArrows direction="down" color={DEMOTE_COLOR} />}
+    </div>
+  );
+}
+
+function RankArrows({ direction, color }: { direction: 'up' | 'down'; color: string }) {
+  const up = direction === 'up';
+  return (
+    <svg
+      className={`rank-arrows rank-arrows--${direction}`}
+      width="18"
+      height="20"
+      viewBox="0 0 24 26"
+      fill="none"
+      stroke={color}
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      role="img"
+      aria-label={up ? "Elo is above this tier's range" : "Elo is below this tier's range"}
+    >
+      <title>
+        {up
+          ? 'Elo is above this tier. Promotion pending.'
+          : 'Elo is below this tier. Demotion pending.'}
+      </title>
+      {up ? (
+        <>
+          <path d="M4 12l8-8 8 8" />
+          <path d="M4 22l8-8 8 8" />
+        </>
+      ) : (
+        <path d="M4 8l8 8 8-8" />
+      )}
+    </svg>
   );
 }
 

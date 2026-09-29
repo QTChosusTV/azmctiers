@@ -80,6 +80,20 @@ export const TIER_THRESHOLDS: { tier: Tier; elo: number }[] = [
 ];
 
 /**
+ * Elo range of a tier, derived from TIER_THRESHOLDS.
+ * min = this tier's threshold, max = next tier's threshold.
+ * The top tier (HT1) has no max (null).
+ */
+export function getTierRange(tier: Tier): { min: number; max: number | null } {
+  const i = TIER_THRESHOLDS.findIndex((t) => t.tier === tier);
+  if (i === -1) return { min: 0, max: null };
+  return {
+    min: TIER_THRESHOLDS[i].elo,
+    max: TIER_THRESHOLDS[i + 1]?.elo ?? null,
+  };
+}
+
+/**
  * Toggle to hide tier-group columns below this threshold in the Tier Grid
  * view (e.g. set to 4 to only ever show Tier 1-4, hiding Tier 5 entirely).
  * Set to `false` to show all 5 groups.
